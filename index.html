@@ -9,7 +9,8 @@
         :root {
             --primary: #ff4d6d;
             --secondary: #c9184a;
-            --glass: rgba(255, 255, 255, 0.5);
+            /* Glow efekti için daha net bir cam efekti */
+            --glass: rgba(255, 255, 255, 0.75); 
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -24,16 +25,7 @@
             overflow-x: hidden;
         }
 
-        /* YOUTUBE GİZLEME - EKRANDAN TAMAMEN UZAKLAŞTIRILDI */
-        #yt-wrap {
-            position: fixed;
-            top: -5000px;
-            left: -5000px;
-            width: 1px;
-            height: 1px;
-            opacity: 0;
-            pointer-events: none;
-        }
+        #yt-wrap { position: fixed; top: -5000px; left: -5000px; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
 
         #intro-screen {
             position: fixed; inset: 0;
@@ -57,6 +49,8 @@
             width: 100%;
             padding: 40px 20px;
             text-align: center;
+            position: relative;
+            z-index: 10; /* İçerik önde */
         }
 
         .names {
@@ -74,7 +68,6 @@
             font-size: 0.9rem;
             letter-spacing: 2px;
             margin-bottom: 30px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
 
         #timer {
@@ -83,16 +76,34 @@
             gap: 15px; width: 100%; max-width: 400px;
         }
 
+        /* --- SAYAÇ KUTULARINA GLOW EFEKTİ --- */
         .time-box {
             background: var(--glass);
-            backdrop-filter: blur(12px);
+            backdrop-filter: blur(15px); /* Cam efekti derinleşti */
             padding: 22px 10px;
             border-radius: 28px;
-            border: 1px solid rgba(255,255,255,0.6);
-            box-shadow: 0 12px 35px rgba(255, 77, 109, 0.12);
-            transition: transform 0.3s ease;
+            border: 1px solid rgba(255,255,255,0.7); /* Kenarlık belirginleşti */
+            
+            /* Temel Glow Efekti (İç ve Dış Parlama) */
+            box-shadow: 
+                0 10px 30px rgba(255, 77, 109, 0.25),   /* Dış, yumuşak pembe parlama */
+                0 0 20px rgba(201, 24, 74, 0.15),       /* Dış, daha koyu kırmızı glow */
+                inset 0 0 15px rgba(255, 255, 255, 0.5), /* İç, beyaz aydınlatma */
+                inset 0 0 5px rgba(201, 24, 74, 0.1);    /* İç, hafif kırmızı derinlik */
+                
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+
+            /* Nabız gibi hafifçe parlayıp sönme animasyonu */
+            animation: pulse-glow 3s infinite ease-in-out;
         }
-        .time-box:active { transform: scale(0.95); }
+
+        @keyframes pulse-glow {
+            0% { box-shadow: 0 10px 30px rgba(255, 77, 109, 0.25), 0 0 20px rgba(201, 24, 74, 0.15), inset 0 0 15px rgba(255, 255, 255, 0.5); }
+            50% { box-shadow: 0 10px 40px rgba(255, 77, 109, 0.4), 0 0 30px rgba(201, 24, 74, 0.25), inset 0 0 20px rgba(255, 255, 255, 0.6); }
+            100% { box-shadow: 0 10px 30px rgba(255, 77, 109, 0.25), 0 0 20px rgba(201, 24, 74, 0.15), inset 0 0 15px rgba(255, 255, 255, 0.5); }
+        }
 
         .time-box span { display: block; font-size: 2.6rem; font-weight: 700; color: var(--secondary); line-height: 1; }
         .time-box label { font-size: 0.8rem; font-weight: 600; text-transform: uppercase; color: #a4133c; }
@@ -104,19 +115,26 @@
             color: var(--secondary);
         }
 
-        .particle { position: absolute; pointer-events: none; z-index: -1; animation: floatUp linear infinite; }
-        @keyframes floatUp {
-            0% { transform: translateY(110vh) rotate(0deg); opacity: 0; }
-            50% { opacity: 0.7; }
-            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+        /* ARKA PLANDA AKAN YAĞMUR */
+        .particle { 
+            position: fixed; 
+            top: -60px; 
+            pointer-events: none; 
+            z-index: 1; /* İçeriğin arkasında */
+            animation: fallDown linear forwards; 
+        }
+
+        @keyframes fallDown {
+            0% { transform: translateY(0vh) rotate(0deg); opacity: 0; }
+            10% { opacity: var(--p-op, 0.4); } 
+            90% { opacity: var(--p-op, 0.4); }
+            100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
         }
     </style>
 </head>
 <body>
 
-    <div id="yt-wrap">
-        <div id="youtube-player"></div>
-    </div>
+    <div id="yt-wrap"><div id="youtube-player"></div></div>
 
     <div id="intro-screen">
         <h1 style="font-family: 'Great Vibes'; font-size: 4rem; margin: 0;">Yakup & İlayda</h1>
@@ -127,7 +145,6 @@
     <div class="main-content" id="main-content">
         <div class="names">Yakup & İlayda</div>
         <div class="date-badge">31 EKİM 2025</div>
-        
         <div id="timer">
             <div class="time-box"><span id="years">0</span><label>Yıl</label></div>
             <div class="time-box"><span id="months">0</span><label>Ay</label></div>
@@ -136,7 +153,6 @@
             <div class="time-box"><span id="minutes">0</span><label>Dakika</label></div>
             <div class="time-box"><span id="seconds">0</span><label>Saniye</label></div>
         </div>
-
         <div class="footer-text">"Seninle geçen her saniye bir ömür..."</div>
     </div>
 
@@ -155,25 +171,19 @@
         }
 
         document.getElementById('enter-btn').addEventListener('click', function() {
-            if (player && player.playVideo) {
-                player.playVideo();
-                player.unMute();
-            }
+            if (player && player.playVideo) { player.playVideo(); player.unMute(); }
             document.getElementById('intro-screen').style.opacity = '0';
             setTimeout(() => {
                 document.getElementById('intro-screen').style.display = 'none';
-                const main = document.getElementById('main-content');
-                main.style.display = 'flex';
+                document.getElementById('main-content').style.display = 'flex';
                 setInterval(createParticle, 350);
             }, 800);
         });
 
-        // --- KESİN TAKVİM HESAPLAMA (31 EKİM ÖZEL) ---
-        const start = new Date(2025, 9, 31, 21, 0, 0); // Ekim ayı index 9'dur
+        const start = new Date(2025, 9, 31, 21, 0, 0); 
 
         function updateTimer() {
             const now = new Date();
-            
             let years = now.getFullYear() - start.getFullYear();
             let months = now.getMonth() - start.getMonth();
             let days = now.getDate() - start.getDate();
@@ -181,25 +191,11 @@
             let minutes = now.getMinutes() - start.getMinutes();
             let seconds = now.getSeconds() - start.getSeconds();
 
-            // Birimleri devretme
             if (seconds < 0) { seconds += 60; minutes--; }
             if (minutes < 0) { minutes += 60; hours--; }
             if (hours < 0) { hours += 24; days--; }
-
-            // ÖNEMLİ: Eğer gün negatifse, bir önceki ayın 31 çekip çekmediğine bakmaksızın 
-            // 31 Ekim'den başladığımız için bugünün tarihi direkt "geçen gün" sayısını verir.
-            if (days < 0) {
-                months--;
-                // 31'inde başladığımız için, bugünün tarihi aslında geçen gün sayısıdır.
-                days = now.getDate(); 
-            }
-            if (months < 0) {
-                months += 12;
-                years--;
-            }
-
-            // Bugün 23 Mart ise bu mantıkla:
-            // Ekim 31 -> Kasım 30 (1 ay) -> Aralık 31 (2 ay) -> Ocak 31 (3 ay) -> Şubat 28 (4 ay) -> Mart 23 (4 ay 23 gün)
+            if (days < 0) { months--; days = now.getDate(); }
+            if (months < 0) { months += 12; years--; }
             
             document.getElementById("years").innerText = Math.max(0, years);
             document.getElementById("months").innerText = Math.max(0, months);
@@ -215,12 +211,28 @@
         function createParticle() {
             const p = document.createElement("div");
             p.classList.add("particle");
-            p.innerHTML = ["❤️", "💖", "✨", "💕"][Math.floor(Math.random() * 4)];
+            
+            const items = ["Y", "İ", "❤️", "💖", "✨"];
+            const selected = items[Math.floor(Math.random() * items.length)];
+            p.innerHTML = selected;
             p.style.left = Math.random() * 100 + "vw";
-            p.style.fontSize = (Math.random() * 20 + 15) + "px";
-            p.style.animationDuration = (Math.random() * 3 + 5) + "s";
+            
+            if(selected === "Y" || selected === "İ") {
+                // Harfler için daha okunaklı ve kalın font
+                p.style.fontFamily = "'Dancing Script', cursive";
+                p.style.fontWeight = "bold";
+                p.style.fontSize = (Math.random() * 10 + 25) + "px";
+                p.style.color = "var(--secondary)";
+                p.style.setProperty('--p-op', '0.6'); // Harfler biraz daha belirgin
+            } else {
+                p.style.fontSize = (Math.random() * 15 + 15) + "px";
+                p.style.setProperty('--p-op', '0.3'); // Kalpler daha saydam
+            }
+
+            const duration = (Math.random() * 4 + 6);
+            p.style.animationDuration = duration + "s";
             document.body.appendChild(p);
-            setTimeout(() => p.remove(), 6000);
+            setTimeout(() => p.remove(), duration * 1000);
         }
     </script>
 </body>
