@@ -9,34 +9,45 @@
         :root {
             --primary: #ff4d6d;
             --secondary: #c9184a;
-            --glass: rgba(255, 255, 255, 0.8);
+            --glass: rgba(255, 255, 255, 0.5);
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
         body, html {
             margin: 0; padding: 0;
-            width: 100%; min-height: 100%;
+            width: 100%; height: 100%;
             font-family: 'Poppins', sans-serif;
-            background: #fff0f3;
-            background: linear-gradient(180deg, #fff0f3 0%, #ffccd5 100%);
+            background: linear-gradient(135deg, #fff0f3 0%, #ffccd5 100%);
+            background-attachment: fixed;
             color: #590d22;
             overflow-x: hidden;
         }
 
+        /* YOUTUBE GİZLEME - EKRANDAN TAMAMEN UZAKLAŞTIRILDI */
+        #yt-wrap {
+            position: fixed;
+            top: -5000px;
+            left: -5000px;
+            width: 1px;
+            height: 1px;
+            opacity: 0;
+            pointer-events: none;
+        }
+
         #intro-screen {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            position: fixed; inset: 0;
+            background: linear-gradient(135deg, var(--secondary), var(--primary));
             display: flex; flex-direction: column; justify-content: center; align-items: center;
-            z-index: 2000; transition: transform 0.8s ease-in-out;
-            color: white; text-align: center; padding: 20px;
+            z-index: 2000; transition: opacity 0.8s ease;
+            color: white; text-align: center;
         }
 
         #enter-btn {
-            margin-top: 25px; padding: 15px 40px;
+            margin-top: 25px; padding: 15px 50px;
             border: none; background: white;
             color: var(--secondary); font-size: 1.1rem; border-radius: 50px;
-            cursor: pointer; font-weight: bold; box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            cursor: pointer; font-weight: bold; box-shadow: 0 10px 20px rgba(0,0,0,0.2);
         }
 
         .main-content {
@@ -44,82 +55,89 @@
             flex-direction: column;
             align-items: center;
             width: 100%;
-            min-height: 100vh;
-            padding: 20px 20px 120px 20px;
+            padding: 40px 20px;
             text-align: center;
         }
 
         .names {
             font-family: 'Great Vibes', cursive;
-            font-size: clamp(3rem, 12vw, 5rem);
+            font-size: clamp(3.5rem, 15vw, 6rem);
             color: var(--secondary);
-            margin-top: 40px;
             margin-bottom: 10px;
+        }
+
+        .date-badge {
+            background: var(--secondary);
+            color: white;
+            padding: 6px 22px;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
 
         #timer {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 12px; width: 100%; max-width: 400px;
-            margin: 20px auto;
+            gap: 15px; width: 100%; max-width: 400px;
         }
 
         .time-box {
             background: var(--glass);
-            backdrop-filter: blur(5px);
-            padding: 15px 5px; border-radius: 20px;
-            box-shadow: 0 5px 15px rgba(255, 77, 109, 0.1);
-            border: 1px solid white;
+            backdrop-filter: blur(12px);
+            padding: 22px 10px;
+            border-radius: 28px;
+            border: 1px solid rgba(255,255,255,0.6);
+            box-shadow: 0 12px 35px rgba(255, 77, 109, 0.12);
+            transition: transform 0.3s ease;
         }
+        .time-box:active { transform: scale(0.95); }
 
-        .time-box span { display: block; font-size: 1.8rem; font-weight: 600; color: var(--primary); }
-        .time-box label { font-size: 0.7rem; color: #a4133c; font-weight: 600; }
+        .time-box span { display: block; font-size: 2.6rem; font-weight: 700; color: var(--secondary); line-height: 1; }
+        .time-box label { font-size: 0.8rem; font-weight: 600; text-transform: uppercase; color: #a4133c; }
 
         .footer-text {
-            margin-top: 30px;
+            margin-top: 50px;
             font-family: 'Dancing Script';
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             color: var(--secondary);
-            line-height: 1.4;
-            padding: 0 10px;
         }
-
-        #youtube-player { position: absolute; top: -500px; left: 0; width: 1px; height: 1px; }
 
         .particle { position: absolute; pointer-events: none; z-index: -1; animation: floatUp linear infinite; }
         @keyframes floatUp {
-            0% { transform: translateY(100vh); opacity: 0; }
-            10% { opacity: 0.8; }
-            100% { transform: translateY(-10vh); opacity: 0; }
+            0% { transform: translateY(110vh) rotate(0deg); opacity: 0; }
+            50% { opacity: 0.7; }
+            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
         }
     </style>
 </head>
 <body>
 
-    <div id="youtube-player"></div>
+    <div id="yt-wrap">
+        <div id="youtube-player"></div>
+    </div>
 
     <div id="intro-screen">
-        <h1 style="font-family: 'Great Vibes'; font-size: 3.5rem; margin: 0;">Yakup & İlayda</h1>
-        <p>"Bana ellerini ver..."</p>
+        <h1 style="font-family: 'Great Vibes'; font-size: 4rem; margin: 0;">Yakup & İlayda</h1>
+        <p>Aşkımızın Zaman Çizelgesi</p>
         <button id="enter-btn">Müziği Başlat ❤️</button>
     </div>
 
     <div class="main-content" id="main-content">
         <div class="names">Yakup & İlayda</div>
-        <div style="font-weight: 600; color: var(--secondary); letter-spacing: 1px; margin-bottom: 20px;">31 EKİM 2025</div>
+        <div class="date-badge">31 EKİM 2025</div>
         
         <div id="timer">
-            <div class="time-box"><span id="years">0</span><label>YIL</label></div>
-            <div class="time-box"><span id="months">0</span><label>AY</label></div>
-            <div class="time-box"><span id="days">0</span><label>GÜN</label></div>
-            <div class="time-box"><span id="hours">0</span><label>SAAT</label></div>
-            <div class="time-box"><span id="minutes">0</span><label>DAKİKA</label></div>
-            <div class="time-box"><span id="seconds">0</span><label>SANİYE</label></div>
+            <div class="time-box"><span id="years">0</span><label>Yıl</label></div>
+            <div class="time-box"><span id="months">0</span><label>Ay</label></div>
+            <div class="time-box"><span id="days">0</span><label>Gün</label></div>
+            <div class="time-box"><span id="hours">0</span><label>Saat</label></div>
+            <div class="time-box"><span id="minutes">0</span><label>Dakika</label></div>
+            <div class="time-box"><span id="seconds">0</span><label>Saniye</label></div>
         </div>
 
-        <div class="footer-text">
-            "Seninle geçen her saniye bir hazine..."
-        </div>
+        <div class="footer-text">"Seninle geçen her saniye bir ömür..."</div>
     </div>
 
     <script>
@@ -132,69 +150,63 @@
         function onYouTubeIframeAPIReady() {
             player = new YT.Player('youtube-player', {
                 videoId: 'gRjsXfD6ivo',
-                playerVars: { 
-                    'autoplay': 0, 
-                    'controls': 0, 
-                    'playsinline': 1, 
-                    'loop': 1, 
-                    'playlist': 'gRjsXfD6ivo' 
-                }
+                playerVars: { 'autoplay': 0, 'controls': 0, 'playsinline': 1, 'loop': 1, 'playlist': 'gRjsXfD6ivo' }
             });
         }
 
         document.getElementById('enter-btn').addEventListener('click', function() {
-            if (player && typeof player.playVideo === 'function') {
+            if (player && player.playVideo) {
                 player.playVideo();
                 player.unMute();
             }
-            document.getElementById('intro-screen').style.transform = 'translateY(-100%)';
-            const main = document.getElementById('main-content');
-            main.style.display = 'flex';
-            
+            document.getElementById('intro-screen').style.opacity = '0';
             setTimeout(() => {
-                window.scrollTo(0, 0);
-                setInterval(createParticle, 400);
-            }, 100);
+                document.getElementById('intro-screen').style.display = 'none';
+                const main = document.getElementById('main-content');
+                main.style.display = 'flex';
+                setInterval(createParticle, 350);
+            }, 800);
         });
 
-        // HASSAS ZAMAN HESAPLAMA FONKSİYONU
-        const startDate = new Date("2025-10-31T21:00:00");
+        // --- KESİN TAKVİM HESAPLAMA (31 EKİM ÖZEL) ---
+        const start = new Date(2025, 9, 31, 21, 0, 0); // Ekim ayı index 9'dur
 
         function updateTimer() {
             const now = new Date();
             
-            let years = now.getFullYear() - startDate.getFullYear();
-            let months = now.getMonth() - startDate.getMonth();
-            let days = now.getDate() - startDate.getDate();
-            let hours = now.getHours() - startDate.getHours();
-            let minutes = now.getMinutes() - startDate.getMinutes();
-            let seconds = now.getSeconds() - startDate.getSeconds();
+            let years = now.getFullYear() - start.getFullYear();
+            let months = now.getMonth() - start.getMonth();
+            let days = now.getDate() - start.getDate();
+            let hours = now.getHours() - start.getHours();
+            let minutes = now.getMinutes() - start.getMinutes();
+            let seconds = now.getSeconds() - start.getSeconds();
 
-            // Saniye düzenleme
+            // Birimleri devretme
             if (seconds < 0) { seconds += 60; minutes--; }
-            // Dakika düzenleme
             if (minutes < 0) { minutes += 60; hours--; }
-            // Saat düzenleme
             if (hours < 0) { hours += 24; days--; }
-            // Gün düzenleme
+
+            // ÖNEMLİ: Eğer gün negatifse, bir önceki ayın 31 çekip çekmediğine bakmaksızın 
+            // 31 Ekim'den başladığımız için bugünün tarihi direkt "geçen gün" sayısını verir.
             if (days < 0) {
-                // Bir önceki ayın kaç gün çektiğini bul
-                let prevMonth = new Date(now.getFullYear(), now.getMonth(), 0).getDate();
-                days += prevMonth;
                 months--;
+                // 31'inde başladığımız için, bugünün tarihi aslında geçen gün sayısıdır.
+                days = now.getDate(); 
             }
-            // Ay düzenleme
             if (months < 0) {
                 months += 12;
                 years--;
             }
 
-            document.getElementById("years").innerText = years;
-            document.getElementById("months").innerText = months;
-            document.getElementById("days").innerText = days;
-            document.getElementById("hours").innerText = hours;
-            document.getElementById("minutes").innerText = minutes;
-            document.getElementById("seconds").innerText = seconds;
+            // Bugün 23 Mart ise bu mantıkla:
+            // Ekim 31 -> Kasım 30 (1 ay) -> Aralık 31 (2 ay) -> Ocak 31 (3 ay) -> Şubat 28 (4 ay) -> Mart 23 (4 ay 23 gün)
+            
+            document.getElementById("years").innerText = Math.max(0, years);
+            document.getElementById("months").innerText = Math.max(0, months);
+            document.getElementById("days").innerText = Math.max(0, days);
+            document.getElementById("hours").innerText = Math.max(0, hours);
+            document.getElementById("minutes").innerText = Math.max(0, minutes);
+            document.getElementById("seconds").innerText = Math.max(0, seconds);
         }
 
         setInterval(updateTimer, 1000);
@@ -203,12 +215,12 @@
         function createParticle() {
             const p = document.createElement("div");
             p.classList.add("particle");
-            p.innerHTML = "❤️";
+            p.innerHTML = ["❤️", "💖", "✨", "💕"][Math.floor(Math.random() * 4)];
             p.style.left = Math.random() * 100 + "vw";
-            p.style.fontSize = (Math.random() * 10 + 15) + "px";
-            p.style.animationDuration = (Math.random() * 3 + 4) + "s";
+            p.style.fontSize = (Math.random() * 20 + 15) + "px";
+            p.style.animationDuration = (Math.random() * 3 + 5) + "s";
             document.body.appendChild(p);
-            setTimeout(() => p.remove(), 5000);
+            setTimeout(() => p.remove(), 6000);
         }
     </script>
 </body>
